@@ -1,0 +1,7 @@
+# ignore Jupyter checkpoint, log and pycache directories
+**/.ipynb_checkpoints/
+**/log/
+**/__pycache__/
+
+# ignore netcdf files
+*.nc
