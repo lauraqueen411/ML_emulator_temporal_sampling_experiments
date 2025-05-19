@@ -65,12 +65,6 @@ gcms_for_training = config["gcms_for_training_GAN"]
 stacked_X, y, vegt, orog, he = preprocess_input_data(config)
 output_means = xr.open_dataset(config["means_output"])
 output_stds = xr.open_dataset(config["stds_output"])
-# To modify
-#stacked_X = stacked_X.sel(GCM =config["gcms_for_training_GAN"][0])
-#y = y.sel(GCM =config["gcms_for_training_GAN"][0])[['pr']]
-
-stacked_X = stacked_X.sel(GCM=gcms_for_training)
-y = y.sel(GCM=gcms_for_training)
 
 try:
     output_varname = [config["output_varname"]]
@@ -89,6 +83,9 @@ elif "sfcWind" in output_varname[0]:
 else:
     y[output_varname[0]] = (y[output_varname[0]] - output_means[output_varname[0]].mean()) / output_stds[output_varname[0]].mean()
     loss_weight = 10
+    
+stacked_X = stacked_X.sel(GCM=gcms_for_training)
+y = y.sel(GCM=gcms_for_training)[output_varname[0]]
 
 common_times = stacked_X.time.to_index().intersection(y.time.to_index())
 y = y.sel(time=common_times)
@@ -111,7 +108,7 @@ if temp_sampling_type != 'all':
         y = y.where(y.time.dt.year.isin(years),drop=True)
 
 
-y = y[output_varname[0]].transpose("time", "lat", "lon", "GCM")
+y = y.transpose("time", "lat", "lon", "GCM")
 stacked_X = stacked_X.transpose("time", "lat", "lon", "GCM", "channel")
 
 # rounding to three decimal places

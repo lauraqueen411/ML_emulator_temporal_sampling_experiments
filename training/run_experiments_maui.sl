@@ -14,7 +14,7 @@
 
 module purge # optional
 module load NeSI
-module load gcc/9.3.0
+#module load gcc/9.3.0
 #module load CDO/1.9.5-GCC-7.1.0
 #module load Miniconda3/4.12.0
 module load cuDNN/8.1.1.33-CUDA-11.2.0
