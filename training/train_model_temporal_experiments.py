@@ -33,7 +33,7 @@ n_channels = config["n_input_channels"]
 n_output_channels = config["n_output_channels"]
 BATCH_SIZE = 16#config["batch_size"]
 init_weights = True
-# config["itensity_weight"] = config["itensity_weight"]*2
+EPOCHS = 230
 
 try:
     temp_sampling_type = config['temp_sampling_type']
@@ -43,13 +43,6 @@ except:
     temp_sampling_type = 'all'
     sampling_file = None
     
-'''
-config["model_name"] = config["model_name"] + "_" + str(config["ad_loss_factor"]) + str(config["output_varname"])
-# appending more gcms if the list is large
-for i in config["gcms_for_training_GAN"]:
-    config["model_name"] = config["model_name"] + '_' + i
-'''
-
 # creating a path to store the model outputs
 if not os.path.exists(f'{config["output_folder"]}/{config["model_name"]}'):
     os.makedirs(f'{config["output_folder"]}/{config["model_name"]}')
@@ -229,5 +222,5 @@ with strategy.scope():
     with open(f'{config["output_folder"]}/{config["model_name"]}/config_info.json', 'w') as f:
         json.dump(config, f)
 
-    wgan.fit(data, batch_size=BATCH_SIZE, epochs=350, verbose=1, shuffle=True,
+    wgan.fit(data, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1, shuffle=True,
              callbacks=[generator_checkpoint, discriminator_checkpoint, unet_checkpoint, prediction_callback])

@@ -1,11 +1,12 @@
 #!/bin/bash -l
 #SBATCH --job-name=GPU_job
 #SBATCH --partition=hgx
-#SBATCH --time=48:59:00
+#SBATCH --time=23:59:00
 #SBATCH --mem=200G
 #SBATCH --cpus-per-task=32
 #SBATCH --gpus-per-node=A100:2
 #SBATCH --account=niwa03712
+#SBATCH --mail-user=laura.queen@niwa.co.nz
 #SBATCH --mail-type=ALL
 #SBATCH --output log/%j-%x.out
 #SBATCH --error log/%j-%x.out
@@ -22,6 +23,5 @@ nvidia-smi
 
 
 /nesi/project/niwa00018/rampaln/envs/ml_env_v2/bin/python train_model_temporal_experiments.py $1
-
 
 

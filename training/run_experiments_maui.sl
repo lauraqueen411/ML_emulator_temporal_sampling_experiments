@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=GPU_job
 #SBATCH --partition=niwa_work
-#SBATCH --time=23:59:00
+#SBATCH --time=24:59:00
 #SBATCH --cluster=maui_ancil
 #SBATCH --mem=250G
 #SBATCH --gpus-per-node=A100:2

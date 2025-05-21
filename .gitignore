@@ -2,8 +2,9 @@
 **/.ipynb_checkpoints/
 **/log/
 **/__pycache__/
-**/training/emulators/
 
 # ignore netcdf files
 *.nc
 *.csv
+*.png
+*.h5
