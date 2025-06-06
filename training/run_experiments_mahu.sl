@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=GPU_job
-#SBATCH --partition=hgx
-#SBATCH --time=23:59:00
+#SBATCH --partition=gpu
+#SBATCH --time=47:59:00
 #SBATCH --mem=200G
 #SBATCH --cpus-per-task=32
 #SBATCH --gpus-per-node=A100:2

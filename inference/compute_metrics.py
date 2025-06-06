@@ -152,12 +152,12 @@ var = sys.argv[3]
 ssp = sys.argv[4]
 ml_output_dir = sys.argv[5]
 gan_flag = sys.argv[6]
-epoch = 215
+epoch = sys.argv[7]
 
 print(f'Computing: {emulator} {gcm} {var}')
 
 if not os.path.exists(f'{ml_output_dir}/metrics/{gcm}/CCAM/{gcm}_{var}_metrics.nc'):
-    compute_save_CCAM(gcm,var)
+    compute_save_CCAM(gcm,var,ml_output_dir)
 else:
     print('\t\tCCAM results exist: skipping')
 

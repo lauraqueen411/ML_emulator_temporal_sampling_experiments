@@ -1,18 +1,20 @@
 #!/bin/bash -l
-#SBATCH --job-name=GPU_job
-#SBATCH --partition=gpu
+#SBATCH --job-name=maui_GPU_job
+#SBATCH --partition=niwa_work
 #SBATCH --time=00:29:00
-#SBATCH --mem=200G
-#SBATCH --cpus-per-task=32
+#SBATCH --cluster=maui_ancil
+#SBATCH --mem=180G
 #SBATCH --gpus-per-node=A100:1
-#SBATCH --account=niwa03712
+#SBATCH --cpus-per-task=2
+#SBATCH --account=niwap03712
 #SBATCH --mail-type=ALL
 #SBATCH --output log/%j-%x.out
 #SBATCH --error log/%j-%x.out
+#SBATCH --exclude=wmg102
 
-module purge && module load NeSI
-#module load gcc/9.3.0
-module load cuDNN/8.6.0.163-CUDA-11.8.0
+module purge # optional
+module load NeSI
+module load cuDNN/8.1.1.33-CUDA-11.2.0
 nvidia-smi
 
 # directories
@@ -36,7 +38,6 @@ variable=$4
 ml_model=$5
 gan=$6
 epoch=$7
-
 
 # apply to historical period in imperfect framework
 /nesi/project/niwa00018/rampaln/envs/ml_env_v2/bin/python run_emulator_temporal_tests.py $gan $variable $input_dir $gcm "historical" $variant $output_dir $ml_model $code_dir "imperfect" $epoch

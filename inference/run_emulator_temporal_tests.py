@@ -26,7 +26,7 @@ output_dir = sys.argv[7]
 ml_model_name = sys.argv[8]
 code_dir = sys.argv[9]
 framework = sys.argv[10]
-epoch = 215
+epoch = sys.argv[11]
 output_norm =1
 
 sys.path.append(f'{code_dir}')
