@@ -18,26 +18,30 @@ CODE_DIR="/nesi/project/niwa00018/queenle/ML_emulator_temporal_sampling_experime
 cd $CODE_DIR
 
 # Define arrays
-ml_models=("pr_ACCESS-CM2_5" "pr_ACCESS-CM2_10" "pr_ACCESS-CM2_20" "pr_ACCESS-CM2_30" "pr_ACCESS-CM2_40" "pr_ACCESS-CM2_50" "pr_ACCESS-CM2_60" "pr_ACCESS-CM2_80" "pr_ACCESS-CM2_100" "pr_ACCESS-CM2_120" "pr_ACCESS-CM2_1961-1980" "pr_ACCESS-CM2_2015-2034" "pr_ACCESS-CM2_2080-2099")
-# "pr_ACCESS-CM2_140" 
+ml_models=("pr_ACCESS-CM2_140")
+#"pr_ACCESS-CM2_5" "pr_ACCESS-CM2_10" "pr_ACCESS-CM2_20" "pr_ACCESS-CM2_30" "pr_ACCESS-CM2_40" "pr_ACCESS-CM2_50" "pr_ACCESS-CM2_60" "pr_ACCESS-CM2_80" "pr_ACCESS-CM2_100" "pr_ACCESS-CM2_120" "pr_ACCESS-CM2_1961-1980" "pr_ACCESS-CM2_2015-2034" "pr_ACCESS-CM2_2080-2099")
+
 
 gcms=("ACCESS-CM2" "EC-Earth3" "NorESM2-MM")
 variants=("r4i1p1f1" "r1i1p1f1" "r1i1p1f1")
+gan_flags=("unet" "GAN")
 
 variable="pr"
 ssp="ssp370"
-gan="GAN" #GAN, unet
-epoch=230
 
-for ml_model in "${ml_models[@]}"; do
-    # Loop through GCMs
-    for i in "${!gcms[@]}"; do
+epoch=220
 
-      gcm="${gcms[i]}"
-      variant="${variants[i]}"
+for gan in "${gan_flags[@]}"; do
+    for ml_model in "${ml_models[@]}"; do
+        # Loop through GCMs
+        for i in "${!gcms[@]}"; do
 
-      sbatch -J "${ml_model}_${gcm}" apply_emulator_mahu.sl "${ssp}" "${gcm}" "${variant}" "${variable}" "${ml_model}" "${gan}" "${epoch}"
-      echo "$ml_model $gcm $ssp $variable"
-      
+          gcm="${gcms[i]}"
+          variant="${variants[i]}"
+
+          sbatch -J "${ml_model}_${gcm}" apply_emulator_mahu.sl "${ssp}" "${gcm}" "${variant}" "${variable}" "${ml_model}" "${gan}" "${epoch}"
+          echo "$ml_model $gcm $ssp $variable"
+
+        done
     done
 done
