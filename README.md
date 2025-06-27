@@ -1,40 +1,31 @@
-# On-the-Extrapolation-of-Generative-Adversarial-Networks-for-downscaling-precipitation-extremes
-This repository contains the code for the Manuscript titled: "On the Extrapolation of Generative Adversarial Networks for downscaling precipitation extremes in warmer climates".
-The data required for this repository can be found at: https://doi.org/10.5281/zenodo.13755687
+# On the relationship between temporal training data and ML regional climate model emulator skill
+This repository contains the code for the draft manuscript titled: "On the relationship between temporal training data and ML regional climate model emulator skill".
 
-Please contact me if you have any further questions about this work (Neelesh Rampal). 
+Please contact Neelesh Rampal if you have any further questions about this work (neelesh.rampal@niwa.co.nz). 
 
-# Copying the Data from Zenodo / Cloning
+# Cloning / External Data
 First, clone this repository ```bash git clone https://github.com/nram812/On-the-Extrapolation-of-Generative-Adversarial-Networks-for-downscaling-precipitation-extremes.git```.
 
-Then copy the files so the "inputs" and "outputs" folders so they appear like the following:
-* inputs/
-    * predictor/
-        * target_ACCESS-CM2_hist_ssp370_pr.nc
-        * Other_GCMs_hist_SSP370_target_fields_pr.nc
+This repo is not entirely self-contained; essential training and inference files are located in other directories on Maui. 
 
-    * target/
-        * predictor_ACCESS-CM2_hist_ssp370.nc
-        * Other_GCMs_hist_SSP370_predictor_fields.nc
-        
-* outputs/
-    * gt_cc_signal_final_v2_geq1mm.nc
+Predictor and target data for training are located here on Maui:
+/nesi/project/niwa00018/ML_downscaling_CCAM/
 
-These files are collectively about 40GB in size. The "static" predictor files, "normalization" files should be part of this repository. 
-Please note that the "Other_GCMs...." are only used for evaluation. The training and evaluation dataset configurations are provided in a configuration file. 
+GCM (imperfect) inference inputs are located here:
+/nesi/project/niwa03712/CMIP6_data/Downscaled_Preprocessed/
 
-## Setting Up A Python Environment
-These experiments have been performed on an Nvidia A100 GPU, and thus the code has been developed in a
-slurm (job scheduling) and unix enivironment.
+coarsened RCM (perfect) inference inputs are located here:
+/nesi/project/niwa00018/ML_downscaling_CCAM/multi-variate-gan/inputs/predictor_fields/
 
-These experiments can be run without slurm, but will require special configurations.
+## Python Environment and Jupyter Kernel
 
-To create the python environment for training this algorithm use the following commands:
+Training, inference and plotting python files are run using the following python:
+/nesi/project/niwa00018/rampaln/envs/ml_env_v2/bin/python
 
-```bash
-conda env create -f environment.yaml
-conda activate ml_env_v2
-```
+A fresh copy of the 'ml_env_v2' conda environment with no builds is located in the 'environment.yml' should it need to be recreated.
+
+All jupyter notebooks use the jupyter kernel called "jupyter_env", located here:
+/scale_wlg_persistent/filesets/home/queenle/.local/share/jupyter/kernels/nellys_env/
 
 
 ## Training the Model

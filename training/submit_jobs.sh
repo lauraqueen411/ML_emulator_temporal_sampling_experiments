@@ -2,7 +2,6 @@
 
 module purge # optional
 module load NeSI
-#module load cuDNN/8.1.1.33-CUDA-11.2.0
 
 # Navigate to the code directory
 CODE_DIR="/nesi/project/niwa00018/queenle/ML_emulator_temporal_sampling_experiments/training"
