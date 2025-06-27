@@ -1,5 +1,3 @@
----
-
 ````markdown
 # On the Relationship Between Temporal Training Data and ML Regional Climate Model Emulator Skill
 
@@ -269,10 +267,3 @@ Located in:
     ```
 
 ---
-
-## Contact
-
-For questions or collaborations, please contact:
-
-**Neelesh Rampal**
-📧 [neelesh.rampal@niwa.co.nz](mailto:neelesh.rampal@niwa.co.
