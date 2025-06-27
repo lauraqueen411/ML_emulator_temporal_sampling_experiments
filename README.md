@@ -1,4 +1,3 @@
-````markdown
 # On the Relationship Between Temporal Training Data and ML Regional Climate Model Emulator Skill
 
 This repository contains the code supporting the draft manuscript:
@@ -36,31 +35,32 @@ This repository is organized into three main components:
 
 All training, inference, and plotting scripts call the following python executable:
 
-```bash
+```
 /nesi/project/niwa00018/rampaln/envs/ml_env_v2/bin/python
 ```
 
 A reproducible environment file for the `ml_env_v2` Conda environment **with no builds** is included:
-
 ```
 environment.yml
 ```
 
----
-
 ### Jupyter Kernel
 
 All notebooks use the **"jupyter\_env"** kernel:
-
 ```
 /scale_wlg_persistent/filesets/home/queenle/.local/share/jupyter/kernels/nellys_env/
 ```
 
+A copy of this kernel is included:
+```
+kernel_copy/
+```
+
 ---
 
-## Emulator Training
+## Emulator Training (/training)
 
-### Main Training Scripts (/training)
+### Main Training Scripts
 
 * **submit\_jobs\_{cluster}.sh**
   * Submits Slurm jobs for each emulator
@@ -90,7 +90,7 @@ All notebooks use the **"jupyter\_env"** kernel:
   ```
   /training/emulators/
   ```
-* Predictor, target, and static inputs defined in the configs:
+* Predictor, target, and static inputs defined in the configs. General located in:
   ```
   /nesi/project/niwa00018/ML_downscaling_CCAM/
   ```
@@ -106,20 +106,17 @@ All notebooks use the **"jupyter\_env"** kernel:
 
 ---
 
-## Emulator Inference
+## Emulator Inference (/inference)
 
-### Main Inference Scripts (/inference)
+### Main Inference Scripts
 
 * **submit\_runs.sh**
   * Submits Slurm jobs for inference
-  * Note: must manual edit variables to select GCMs, emulators, ML types (GAN/U-Net) and epoch for inference
-
+  * Note: must manually edit variables to select GCMs, emulators, ML types (GAN/U-Net) and epoch for inference
 * **apply\_emulator\_{cluster}.sl**
   * Slurm configuration for Maui/Mahuika
-
 * **run\_emulator\_temporal\_tests.py**
   * Main inference script
-
 * **compute\_metrics.py**
   * Computes climatological metrics after inference
   * Metrics include annual/seasonal means, rx1d, total max
@@ -149,11 +146,11 @@ All notebooks use the **"jupyter\_env"** kernel:
 * Structure:
   ```
   /{GCM}/{emulator}/
-      - NetCDF downscaled simulations
-      - Organized by historical/ssp370, perfect/imperfect, GAN/U-Net, epochs
+      - NetCDF files of downscaled simulations
+      - Separated by historical/ssp370, perfect/imperfect, GAN/U-Net, epochs
 
   /metrics/{GCM}/{emulator}/
-      - NetCDF metric climatologies
+      - NetCDF files of metric climatologies
   ```
 
 ---
@@ -190,7 +187,6 @@ All notebooks use the **"jupyter\_env"** kernel:
 
 ### Plotting Metrics Computation (/plotting/compute_metrics)
 
-```
 * RMSE image errors are computed in notebooks
 * histogram and PSD counts are computed using a bash -> SLURM -> python workflow
 * all metric results are saved in the /results directory
