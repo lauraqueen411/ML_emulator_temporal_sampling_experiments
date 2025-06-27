@@ -1,88 +1,278 @@
-# On the relationship between temporal training data and ML regional climate model emulator skill
-This repository contains the code for the draft manuscript titled: "On the relationship between temporal training data and ML regional climate model emulator skill".
+---
 
-Please contact Neelesh Rampal if you have any further questions about this work (neelesh.rampal@niwa.co.nz). 
+````markdown
+# On the Relationship Between Temporal Training Data and ML Regional Climate Model Emulator Skill
 
-## Cloning / External Data
-First, clone this repository ```bash git clone https://github.com/lauraqueen411/ML_emulator_temporal_sampling_experiments.git```.
+This repository contains the code supporting the draft manuscript:
 
-This repo is not entirely self-contained; essential training and inference files are located in other directories on Maui, detailed in the sections below.
+> **"On the relationship between temporal training data and ML regional climate model emulator skill"**
 
-## Python Environment and Jupyter Kernel
+Please contact **Neelesh Rampal** for questions:  
+📧 neelesh.rampal@niwa.co.nz
 
-Training, inference and plotting python files are run using the following python:
+---
+
+## Quick Start
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/lauraqueen411/ML_emulator_temporal_sampling_experiments.git
+````
+
+**Note:** This repository is *not fully self-contained*. Essential training and inference data are located on the **Maui** system and described below.
+
+---
+
+## Project Structure
+
+This repository is organized into three main components:
+
+1. **Training** – Model training workflows and configurations
+2. **Inference** – Emulator application and evaluation
+3. **Plotting** – Analysis and figure generation
+
+---
+
+## Python Environment
+
+All training, inference, and plotting scripts use the following environment on **Maui**:
+
+```bash
 /nesi/project/niwa00018/rampaln/envs/ml_env_v2/bin/python
+```
 
-A fresh copy of the 'ml_env_v2' conda environment with no builds is located in the 'environment.yml' should it need to be recreated.
+A reproducible environment file is included:
 
-All jupyter notebooks use the jupyter kernel called "jupyter_env", located here:
+```
+environment.yml
+```
+
+This can be used to recreate the `ml_env_v2` Conda environment **with no builds**.
+
+---
+
+### Jupyter Kernel
+
+All notebooks use the **"jupyter\_env"** kernel:
+
+```
 /scale_wlg_persistent/filesets/home/queenle/.local/share/jupyter/kernels/nellys_env/
+```
 
+---
 
 ## Emulator Training
 
-Training occurs in the /training directory.
+Training scripts are located in:
 
-There are three main scripts for training, where {cluster} refers to maui or mahu (aka mahuika):
-* **submit_jobs_{cluster}.sh** (submits slurm jobs for each emulator reading in /emulator/ config json files)
-* **run_experiments_{cluster}.sl** (the slurm configuration for each job)
-* **train_model_temporal_experiments.py** (the main python training script)
+```
+/training
+```
 
-Additionally, the **temporal_samplings_2.csv** file is essential for the temporal sampling experiments. It is read by the emulator config files
-and is the **basis of the entire experiment design**. The method for defining the samplings is in the 'define_temporal_samplings.ipynb' notebook.
-This should be re-run carefully to ensure the sampling .csv file is not overwritten.
+### Main Training Scripts
 
-Training inputs:
-* Emulator config (.json) files are located in the /training/emulators/ directory
-* paths to predictor, target and static inputs are defined in the config files and point to this directory: /nesi/project/niwa00018/ML_downscaling_CCAM/
+* **submit\_jobs\_{cluster}.sh**
 
-Training outputs:
-* weights (.h5) files and periodic image (.png) files are saved to respective /emulators/{emulator_name}/ folder throughout training.
+  * Submits Slurm jobs for each emulator
+  * Reads configs from `/emulators/`
+* **run\_experiments\_{cluster}.sl**
+
+  * Slurm configuration for Maui or Mahuika clusters
+* **train\_model\_temporal\_experiments.py**
+
+  * Main Python training script
+
+---
+
+### Essential Training Files
+
+* **temporal\_samplings\_2.csv**
+
+  * Critical for temporal sampling experiments
+  * Defined using:
+
+    ```
+    /training/define_temporal_samplings.ipynb
+    ```
+  * **Important:** Re-run carefully to avoid overwriting the CSV.
+
+---
+
+### Training Inputs
+
+* Emulator config `.json` files in:
+
+  ```
+  /training/emulators/
+  ```
+* Predictor, target, and static inputs defined in the configs:
+
+  ```
+  /nesi/project/niwa00018/ML_downscaling_CCAM/
+  ```
+
+---
+
+### Training Outputs
+
+* Model weights (`.h5`) and periodic images (`.png`) saved to:
+
+  ```
+  /emulators/{emulator_name}/
+  ```
+
+---
 
 ## Emulator Inference
 
-Emulator inference occurs in the /inference directory.
+Inference scripts are in:
 
-There are four important scripts when running emulator inference:
-* **submit_runs.sh** (submits slurm jobs for inference)
-    * NOTE: variables need to be set to select which GCMs, emulators, ml_types (GAN, U-Net) and epochs are being used for inference
-* **apply_emulator_{cluster}.sl** (slurm configuration for each job for the relevent Maui or Mahuika cluster)
-* **run_emulator_temporal_tests.py** (the main python script for emulator inference)
-* **compute_metrics.py** (script called by the slurm file directly after inference to compute selected metrics)
-    * metric (e.g. annual/seasonal means, Rx1d, total max) climatologies computed for historical (1985-2004), future (2080-2099) periods
+```
+/inference
+```
 
-Inference inputs:
-* reads in relevant emulator config file from /training/emulators
-* perfect (coarsened RCM) inputs from /nesi/project/niwa00018/ML_downscaling_CCAM/multi-variate-gan/inputs/predictor_fields/
-* imperfect (raw GCM) inputs from /nesi/project/niwa03712/CMIP6_data/Downscaled_Preprocessed/
+### Main Inference Scripts
 
-Inference outputs:
+* **submit\_runs.sh**
 
-* outputs saved in /inference/output/...
-    * /{GCM}/{emulator}/ - netcdf files for downscaled simulation separated by historical/ssp370, perfect/imperfect, GAN/unet, and epochs.
-    * /metrics/{GCM}/{emulator}/ - netcdf files for metric climatologies separated by perfect/imperfect, GAN/unet, and epochs.
+  * Submits Slurm jobs for inference
+  * Edit variables to select:
+
+    * GCMs
+    * Emulators
+    * ML types (GAN, U-Net)
+    * Epochs
+
+* **apply\_emulator\_{cluster}.sl**
+
+  * Slurm configuration for Maui/Mahuika
+
+* **run\_emulator\_temporal\_tests.py**
+
+  * Main inference script
+
+* **compute\_metrics.py**
+
+  * Computes climatological metrics after inference
+  * Metrics include:
+
+    * Annual/seasonal means
+    * Rx1d
+    * Total max
+    * Historical (1985–2004) and future (2080–2099) periods
+
+---
+
+### Inference Inputs
+
+* Emulator config from:
+
+  ```
+  /training/emulators
+  ```
+* Perfect (coarsened RCM) inputs:
+
+  ```
+  /nesi/project/niwa00018/ML_downscaling_CCAM/multi-variate-gan/inputs/predictor_fields/
+  ```
+* Imperfect (raw GCM) inputs:
+
+  ```
+  /nesi/project/niwa03712/CMIP6_data/Downscaled_Preprocessed/
+  ```
+
+---
+
+### Inference Outputs
+
+* Results saved in:
+
+  ```
+  /inference/output/
+  ```
+
+* Structure:
+
+  ```
+  /{GCM}/{emulator}/
+      - NetCDF downscaled simulations
+      - Organized by historical/ssp370, perfect/imperfect, GAN/U-Net, epochs
+
+  /metrics/{GCM}/{emulator}/
+      - NetCDF metric climatologies
+  ```
+
+---
 
 ## Plotting
 
-All plotting code is located in the /plotting directory. Jupyter notebooks for finalized figures are titled referencing the manuscript figure numbering, 
-e.g. 'Figure_1_temporal_sampling.ipynb'. Each 'Figure_X' notebook contains code to produce the final figure as well as ALL possible plots across the 
-experiment dimensions (GCMs, epoch, framework, etc). Meanwhile, notebooks without 'Figure' in the title contain code for other exploratory or supplementary
-plotting.
+Plotting code is in:
 
-Plotting Output
-* /plotting/final_figures : finalized figures for manuscript saved here.
-* /plotting/plots : all possible plots across experiment dimensions saved here.
+```
+/plotting
+```
 
-The other major component of this directory is the computation of plotting metrics. This includes the computation of RMSE image errors, daily precipitation 
-histogram counts (used for LHD), and PSD histogram counts (used for RALSD). 
+### Figure Notebooks
 
-All computation is located in the /plotting/compute_metrics directory:
-* RMSE image errors are computed in notebooks
-* histogram and PSD counts are computed using a bash -> SLURM -> python workflow
-* all metric results are saved in the /results directory
+* Named by manuscript figure numbers:
 
+  ```
+  Figure_1_temporal_sampling.ipynb, etc.
+  ```
+* Each notebook:
 
+  * Produces final figure
+  * Generates *all* plots across experiment dimensions (GCMs, epoch, framework)
 
+---
 
+### Other Plotting Notebooks
 
+* Without "Figure" in the name:
 
+  * Exploratory or supplementary analyses
+
+---
+
+### Plotting Outputs
+
+* Final manuscript figures:
+
+  ```
+  /plotting/final_figures
+  ```
+* All experiment plots:
+
+  ```
+  /plotting/plots
+  ```
+
+---
+
+### Plotting Metrics Computation
+
+Located in:
+
+```
+/plotting/compute_metrics
+```
+
+* RMSE image errors: computed in notebooks
+* Histogram and PSD counts:
+
+  * Bash → SLURM → Python workflow
+  * Results saved in:
+
+    ```
+    /results
+    ```
+
+---
+
+## Contact
+
+For questions or collaborations, please contact:
+
+**Neelesh Rampal**
+📧 [neelesh.rampal@niwa.co.nz](mailto:neelesh.rampal@niwa.co.
