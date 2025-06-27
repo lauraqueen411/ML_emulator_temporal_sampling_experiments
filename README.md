@@ -19,7 +19,7 @@ All jupyter notebooks use the jupyter kernel called "jupyter_env", located here:
 /scale_wlg_persistent/filesets/home/queenle/.local/share/jupyter/kernels/nellys_env/
 
 
-## Training the Model
+## Emulator Training
 
 Training occurs in the /training directory.
 
@@ -39,7 +39,7 @@ Training inputs:
 Training outputs:
 * weights (.h5) files and periodic image (.png) files are saved to respective /emulators/{emulator_name}/ folder throughout training.
 
-### Emulator Inference
+## Emulator Inference
 
 Emulator inference occurs in the /inference directory.
 
@@ -62,7 +62,25 @@ Inference outputs:
     * /{GCM}/{emulator}/ - netcdf files for downscaled simulation separated by historical/ssp370, perfect/imperfect, GAN/unet, and epochs.
     * /metrics/{GCM}/{emulator}/ - netcdf files for metric climatologies separated by perfect/imperfect, GAN/unet, and epochs.
 
-### Plotting
+## Plotting
+
+All plotting code is located in the /plotting directory. Jupyter notebooks for finalized figures are titled referencing the manuscript figure numbering, 
+e.g. 'Figure_1_temporal_sampling.ipynb'. Each 'Figure_X' notebook contains code to produce the final figure as well as ALL possible plots across the 
+experiment dimensions (GCMs, epoch, framework, etc). Meanwhile, notebooks without 'Figure' in the title contain code for other exploratory or supplementary
+plotting.
+
+Plotting Output
+* /plotting/final_figures : finalized figures for manuscript saved here.
+* /plotting/plots : all possible plots across experiment dimensions saved here.
+
+The other major component of this directory is the computation of plotting metrics. This includes the computation of RMSE image errors, daily precipitation 
+histogram counts (used for LHD), and PSD histogram counts (used for RALSD). 
+
+All computation is located in the /plotting/compute_metrics directory:
+* RMSE image errors are computed in notebooks
+* histogram and PSD counts are computed using a bash -> SLURM -> python workflow
+* all metric results are saved in the /results directory
+
 
 
 
